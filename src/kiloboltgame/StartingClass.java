@@ -11,8 +11,9 @@ import java.net.URL;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
     private Robot robot;
+    private Heliboy hb, hb1;
     private Image image, currentSprite, character, characterJumped,
-            characterDown, background;
+            characterDown, background, heliboy;
     private Graphics second;
     private URL base;
     private static Background bg1, bg2;
@@ -34,6 +35,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         }
 
         // Image setups
+        heliboy = getImage(base, "data/heliboy.png");
         characterJumped = getImage(base, "data/Jumped.png");
         characterDown = getImage(base, "data/down.png");
         character = getImage(base, "data/character.png");
@@ -47,6 +49,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         bg1 = new Background(0, 0);
         bg2 = new Background(2160, 0);
         robot = new Robot();
+        hb = new Heliboy(340, 360);
+        hb1 = new Heliboy(700, 360);
         // TODO Auto-generated method stub
         Thread thread = new Thread(this) {
         };
@@ -79,6 +83,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             } else if (robot.isDucked()) {
                 currentSprite = characterDown;
             }
+            hb.update();
+            hb1.update();
             repaint();
             try {
                 Thread.sleep(17);
@@ -109,6 +115,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
         g.drawImage(currentSprite, robot.getCenterX() - 61,
                 robot.getCenterY() - 63, this);
+        g.drawImage(heliboy, hb.getCenterX() - 48, hb.getCenterY() - 48, this);
+        g.drawImage(heliboy, hb1.getCenterX() - 48, hb1.getCenterY() - 48, this);
     }
 
     @Override
