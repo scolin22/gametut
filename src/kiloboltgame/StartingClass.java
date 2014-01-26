@@ -11,9 +11,11 @@ import java.net.URL;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
     private Robot robot;
-    private Image image, character;
+    private Image image, currentSprite, character, characterJumped,
+            characterDown, background;
     private Graphics second;
     private URL base;
+    private static Background bg1, bg2;
 
     @Override
     public void init() {
@@ -32,11 +34,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         }
 
         // Image setups
+        characterJumped = getImage(base, "data/Jumped.png");
+        characterDown = getImage(base, "data/down.png");
         character = getImage(base, "data/character.png");
+        currentSprite = character;
+
+        background = getImage(base, "data/background.png");
     }
 
     @Override
     public void start() {
+        bg1 = new Background(0, 0);
+        bg2 = new Background(2160, 0);
         robot = new Robot();
         // TODO Auto-generated method stub
         Thread thread = new Thread(this) {
@@ -61,7 +70,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void run() {
         // TODO Auto-generated method stub
         while (true) {
+            bg1.update();
+            bg2.update();
             robot.update();
+            currentSprite = character;
+            if (robot.isJumped()) {
+                currentSprite = characterJumped;
+            } else if (robot.isDucked()) {
+                currentSprite = characterDown;
+            }
             repaint();
             try {
                 Thread.sleep(17);
@@ -88,8 +105,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        // TODO Auto-generated method stub
-        g.drawImage(character, robot.getCenterX() - 61,
+        g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
+        g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
+        g.drawImage(currentSprite, robot.getCenterX() - 61,
                 robot.getCenterY() - 63, this);
     }
 
@@ -108,6 +126,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             break;
         case KeyEvent.VK_DOWN:
             System.out.println("Pressed DOWN");
+            currentSprite = characterDown;
+            robot.duck();
             break;
         case KeyEvent.VK_LEFT:
             System.out.println("Pressed LEFT");
@@ -137,14 +157,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             break;
         case KeyEvent.VK_DOWN:
             System.out.println("Released DOWN");
+            robot.unduck();
             break;
         case KeyEvent.VK_LEFT:
             System.out.println("Released LEFT");
-            robot.stop();
+            robot.stopLeft();
             break;
         case KeyEvent.VK_RIGHT:
             System.out.println("Released RIGHT");
-            robot.stop();
+            robot.stopRight();
             break;
         case KeyEvent.VK_SPACE:
             System.out.println("Released SPACE");
@@ -153,5 +174,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         default:
             break;
         }
+    }
+
+    public static Background getBg1() {
+        return bg1;
+    }
+
+    public static Background getBg2() {
+        return bg2;
     }
 }

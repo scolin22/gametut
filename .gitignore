@@ -1,6 +1,10 @@
 /bin
 /src/data
 
+# OSX .gitignore
+.DS_STORE
+._*
+
 # Java .gitignore
 *.class
 
