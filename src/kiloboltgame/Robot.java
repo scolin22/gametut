@@ -22,23 +22,16 @@ public class Robot {
     public void update() {
         // Update X or Scroll Background
         if (speedX < 0) {
-            centerX += speedX;
+            bg1.setSpeedX(MOVESPEED);
+            bg2.setSpeedX(MOVESPEED);
         }
-        if (speedX <= 0) {
+        if (speedX == 0) {
             bg1.setSpeedX(0);
             bg2.setSpeedX(0);
         }
-        if (centerX <= 200 && speedX > 0) {
-            centerX += speedX;
-        }
-        if (speedX > 0 && centerX > 200) {
+        if (speedX > 0) {
             bg1.setSpeedX(-MOVESPEED);
             bg2.setSpeedX(-MOVESPEED);
-        }
-
-        // Prevent going beyond X coordinate of 0
-        if (centerX + speedX <= 60) {
-            centerX = 61;
         }
 
         // Update Y

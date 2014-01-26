@@ -14,6 +14,8 @@ public class Background {
 
         if (bgX <= -2160) {
             bgX += 4320;
+        } else if (bgX >= 2160) {
+            bgX -= 4320;
         }
     }
 
