@@ -1,5 +1,7 @@
 package kiloboltgame;
 
+import java.util.ArrayList;
+
 public class Robot {
     // Constants
     final int JUMPSPEED = -15;
@@ -18,6 +20,8 @@ public class Robot {
 
     private int speedX = 0;
     private int speedY = 1;
+
+    private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     public void update() {
         // Update X or Scroll Background
@@ -111,6 +115,11 @@ public class Robot {
         }
     }
 
+    public void shoot() {
+        Projectile p = new Projectile(centerX + 50, centerY - 25);
+        projectiles.add(p);
+    }
+
     public void unduck() {
         ducked = false;
     }
@@ -177,5 +186,9 @@ public class Robot {
 
     public void setMovingLeft(boolean movingLeft) {
         this.movingLeft = movingLeft;
+    }
+
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
     }
 }

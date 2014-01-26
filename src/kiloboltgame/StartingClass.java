@@ -8,12 +8,13 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
     private Robot robot;
     private Heliboy hb, hb1;
     private Image image, currentSprite, character, characterJumped,
-            characterDown, background, heliboy;
+            characterDown, background, heliboy, projectile;
     private Graphics second;
     private URL base;
     private static Background bg1, bg2;
@@ -85,6 +86,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
             hb.update();
             hb1.update();
+            ArrayList projectiles = robot.getProjectiles();
+            for (int i = 0; i < projectiles.size(); i++) {
+                Projectile p = (Projectile) projectiles.get(i);
+                if (p.isVisible()) {
+                    p.update();
+                } else {
+                    projectiles.remove(i);
+                }
+
+            }
             repaint();
             try {
                 Thread.sleep(17);
@@ -113,6 +124,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void paint(Graphics g) {
         g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
+
+        ArrayList projectiles = robot.getProjectiles();
+        for (int i = 0; i < projectiles.size(); i++) {
+            Projectile p = (Projectile) projectiles.get(i);
+            if (p.isVisible()) {
+                g.setColor(Color.YELLOW);
+                g.drawRect(p.getX(), p.getY(), 10, 5);
+            }
+
+        }
+
         g.drawImage(currentSprite, robot.getCenterX() - 61,
                 robot.getCenterY() - 63, this);
         g.drawImage(heliboy, hb.getCenterX() - 48, hb.getCenterY() - 48, this);
@@ -148,6 +170,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         case KeyEvent.VK_SPACE:
             System.out.println("Pressed SPACE");
             robot.jump();
+            break;
+        case KeyEvent.VK_C:
+            System.out.println("Pressed C");
+            if (robot.isDucked() == false && robot.isJumped() == false) {
+                robot.shoot();
+            }
             break;
 
         default:
